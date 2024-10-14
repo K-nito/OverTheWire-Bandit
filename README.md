@@ -55,3 +55,26 @@ The instructions said that the password was stored somewhere in the server. So, 
 
 ![image](https://github.com/user-attachments/assets/8eac1072-503b-4fa1-a8a9-502d76b46fb8)
 
+Let's break this command down.
+
+<b>find / :</b> The command we use the find files. The slash indicates to search the root directory and all sub-directories for the file.
+
+<b>-size 33c :</b> To specify the file we want is 33 bytes in size.
+
+<b>-user bandit7 :</b> To specify the file we want is owned by user bandit7
+
+<b>-group bandit6 :</b> To specify that the file is owned by group bandit6
+
+<b>2>/dev/null :</b> This part of the command re-directs all error outputs to a folder /dev/null, basically a trash folder where data is discarded. This is done so we don't get a mountain of error outputs we have to sift through.
+
+Now, let's execute the command.
+
+![image](https://github.com/user-attachments/assets/964f6ea1-4d03-48e0-b50e-f5f836b4e783)
+
+Nice.
+
+<h2>Level 7 -> 8</h2>
+
+The password for the next level is stored in the file data.txt next to the word millionth. This data.txt has hundreds of lines! We cannot hope to scroll and try to find it, so let's utilize the strings and grep commands.
+
+strings prints out sequences of printable characters in the targeted file, and grep can find us certain sequences according to the pattern we give it.
