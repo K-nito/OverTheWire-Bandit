@@ -78,3 +78,93 @@ Nice.
 The password for the next level is stored in the file data.txt next to the word millionth. This data.txt has hundreds of lines! We cannot hope to scroll and try to find it, so let's utilize the strings and grep commands.
 
 strings prints out sequences of printable characters in the targeted file, and grep can find us certain sequences according to the pattern we give it.
+
+![image](https://github.com/user-attachments/assets/d51487b6-164a-4d9e-b7c5-f62fd9e4b399)
+
+the '|' in between the two commands is a pipe. Piping allows us to direct outputs of commands into other commands. This means the Sequences of data.txt procured by the strings commands is sent to the grep command, which gives us the sequence with the word "millionth" in it.
+
+<h2>Level 8 -> 9</h2>
+
+The file data.txt in this level has many sequences of characters, any of which could be the password. However, we're told that the password only repeats once! So, lets utilize the sort and uniq commands this time.
+
+sort, sorts the lines of data.txt. We do this because only then will the uniq command work. The uniq -u command returns us only unique lines in a sorted text file.
+
+![image](https://github.com/user-attachments/assets/9980a89e-8e71-4b70-957b-f198435130e3)
+
+<h2>Level 9 -> 10</h2>
+
+Now we have a data.txt again. This time, it's a jumble of readable characters and binary data. We're told that the password is in one of the readable strings, preceded by a number of "=". For this we need to use strings and grep again.
+
+![image](https://github.com/user-attachments/assets/e88c78f5-7594-4124-b13c-6ce5012e4809)
+
+<h2>Level 10 -> 11</h2>
+
+The data.txt file is containing the password. However, it's encoded in base64. So, we need to use the Base64 command, with the -d option for decoding.
+
+![image](https://github.com/user-attachments/assets/c4f9dd7a-5754-409f-9851-8f0725a8200b)
+
+<h2>Level 11 -> 12</h2>
+
+The password for the next level is stored in the file data.txt, where all lowercase (a-z) and uppercase (A-Z) letters have been rotated by 13 positions. This is also the principle of ROT13, a cypher that shifts each letter of a sequence by 13 characters. This means if we apply ROT13 twice, we get the original sequence, since the alphabet is 26 characters long.
+
+We can use the tr command here to apply ROT13.
+
+![image](https://github.com/user-attachments/assets/8b085bce-6480-4985-b5d0-212dccaaa8b5)
+
+The tr command can translate characters. Here, tr [a-z] [n-za-m] shifts each character 13 places to the right. If a character is after n, then it is mapped to the second half of the second argument (a-m).
+
+However, it seems I didn't account for the uppercase characters... Let's fix that.
+
+![image](https://github.com/user-attachments/assets/75830b1f-8106-4565-8227-3f6d9fb22cbf)
+
+Alright!
+
+<h2>Level 12 -> 13</h2>
+
+The password for the next level is stored in the file data.txt, which is a hexdump of a file that has been repeatedly compressed.
+
+First of all, I might have to make a lot files. So I will create a temporary directory under /tmp to not clutter things up.
+
+![image](https://github.com/user-attachments/assets/fd06faeb-dbee-4c55-a567-2e62d6f4d237)
+
+Then, I'll copy the data.txt file to this temporary directory.
+
+![image](https://github.com/user-attachments/assets/14a9a6a0-e64e-47f0-abe0-2cc607829dbf)
+
+Now let's start actually working on this file. First of all, we know it's a hex dump. So we have to revert this hexdump, using the xxd command with the -r option, for reverting, and send the output into a separate file.
+
+![image](https://github.com/user-attachments/assets/2360dac6-91a8-46f6-bd97-8a9dd6dcaffd)
+
+Now we have this mess... Let's see what it actually is, using the file command.
+
+![image](https://github.com/user-attachments/assets/3b1018ce-51b2-4d1f-a304-40266c591176)
+
+It's gzip compressed data. Let's use the gzip command to unzip it, by using the -d option for decompressing. But first, we have to rename the file to have a .gz extension, otherwise gzip can't recognize it as a gzip compressed file.
+
+![image](https://github.com/user-attachments/assets/62eed3e7-9755-41c8-990a-fee4bd13238a)
+
+Alright, now what file type is it this time?
+
+![image](https://github.com/user-attachments/assets/c61ebeb5-9fd6-4462-8c5c-aa5ef68ca9dc)
+
+It's bzip2, another compression method. For bzip2 compressed data, we need to use bzip -d to decompress it. But once again, we have to rename the file to have a .bz2 extension.
+
+![image](https://github.com/user-attachments/assets/6325e496-89d4-4032-9e98-65c164685246)
+
+What file type now? It's gzip again!
+
+![image](https://github.com/user-attachments/assets/3fdbfd5b-ac0f-449b-ac35-dd0f4e583205)
+
+And what type of file do we have now? Gzip? Bzip2? 
+
+![image](https://github.com/user-attachments/assets/372bb9d8-8db8-4dda-ae02-08416ec13d24)
+
+Neither! It's a tar archive. Let's use tar -xf to extract the data from it. The -f is used to force the command, the -x to signify extraction.
+
+![image](https://github.com/user-attachments/assets/9f282185-fd38-4193-8510-4239657e59f7)
+
+From this point onwards, it's gzip, bzip2 and tar archives within each other. For brevity's sake I am simply showing you the remaining commands I've used.
+
+
+
+
