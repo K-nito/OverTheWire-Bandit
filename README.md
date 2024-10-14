@@ -222,3 +222,64 @@ This command opens a SSL/TLS encrypted connection. Without specifying the host, 
 
 <h2>Level 16 -> 17</h2>
 
+The credentials for the next level can be retrieved by submitting the password of the current level to a port on localhost in the range 31000 to 32000. First, I need to find out which of these ports have a server listening on them. Then, find out which of those speak SSL/TLS and which don’t. There is only 1 server that will give the next credentials, the others will simply send back to you whatever you send to it.
+
+We need NetCat once more! with the -zv options applied, we can get an extensive list of all ports between 31000 to 32000 that have a server listening on them.
+
+![image](https://github.com/user-attachments/assets/cc80252c-860a-4684-8646-ae61b149648e)
+
+That's a lot of ports, obviously. I can't show the full list here, but we got 4 or 5 successful matches! Let's see which ones speak SSL/TLS.
+
+![image](https://github.com/user-attachments/assets/fa8930dd-aed2-4d46-a623-442adc984fbd)
+
+Ports 31960 and 31691 have listening servers on them, but they don't speak SSL/TLS unfortunately. Let's try the next port, 31790.
+
+![image](https://github.com/user-attachments/assets/fd79dc98-51d5-4542-9147-1b4b93cf7ec8)
+
+This output is different. Seems like it's a match!
+
+![image](https://github.com/user-attachments/assets/8c6cb5df-c17b-45de-a1fe-856af140fae4)
+
+KEYUPDATE...? The OverTheWire page had something to say about this!
+
+> Helpful note: Getting “DONE”, “RENEGOTIATING” or “KEYUPDATE”? Read the “CONNECTED COMMANDS” section in the manpage.
+
+Navigating to the manpage for openssl-s_client, we see that KEYUPDATE is a response to a command 'k' at the start of the line to send a key update message to the server. This was triggered since our password starts with the letter 'k'.
+
+We can tell openssl to ignore such special commands by using the -ign_eof option.
+
+![image](https://github.com/user-attachments/assets/b2b1a8da-d756-43d7-ae40-0ddeb763e00d)
+
+![image](https://github.com/user-attachments/assets/773edecf-0e54-4cc0-ac96-56a0702d8302)
+
+Now we got an RSA key! We can use this to get into Level 17 via key authentication.
+
+<h2>Level 17 -> 18</h2>
+
+There are 2 files in the homedirectory: passwords.old and passwords.new. The password for the next level is in passwords.new and is the only line that has been changed between passwords.old and passwords.new
+
+For this, we'll use the diff command to compare the two files.
+
+![image](https://github.com/user-attachments/assets/1e12f014-15fd-4977-8668-fa42ea75c815)
+
+Since the password is in passwords.new, x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO is the password for the next level. 
+
+<h2>Level 18 -> 19</h2>
+
+When trying to log in with the password we got in the previous level, we're met with this : 
+
+![image](https://github.com/user-attachments/assets/89f03b92-785a-4bb0-bc99-ef855fc5f39e)
+
+??? 
+
+> The password for the next level is stored in a file readme in the homedirectory. Unfortunately, someone has modified .bashrc to log you out when you log in with SSH.
+
+Well, that explains it. 
+
+Luckily, we don't need to log into the remote computer to see what the password in the readme file is. SSH allows us to put a command after the SSH entry command, so instead of logging us in, it returns whatever output produced by executing the command we appended.
+
+![image](https://github.com/user-attachments/assets/600b8596-bdda-408f-9e2b-2e78d239699a)
+
+<h2></h2>
+
+And that's levels 0-18 of the Bandit course of OverTheWire.org! I learnt alot about networking, and I'm quite interested by this so I've decided to continue with the rest of the course.
