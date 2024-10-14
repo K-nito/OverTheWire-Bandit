@@ -165,6 +165,27 @@ Neither! It's a tar archive. Let's use tar -xf to extract the data from it. The 
 
 From this point onwards, it's gzip, bzip2 and tar archives within each other. For brevity's sake I am simply showing you the remaining commands I've used.
 
+![image](https://github.com/user-attachments/assets/e825b2ee-81d0-481d-b285-ad5f840db7f0)
 
+<h2>Level 13 -> 14</h2>
 
+This time, there's no data.txt... there's a ssh private key. We can log into remote machines with SSH in two ways ; with a password, or with a key. 
+So what we have to do here is log into bandit14 with the ssh key instead of a password. 
 
+But first, we need to get that key onto the computer we are using! And for that, we need the scp command.
+
+scp allows us to transfer files over the internet via ssh.
+
+![image](https://github.com/user-attachments/assets/8dd1047e-46d2-41f8-9041-37d833d87faa)
+
+This is the gist of what this command exactly does:
+
+It connects to port 2220 of bandit13@bandit.labs.overthewire.org, and then searches for a file "sshkey.private" to send to a location in my local machine.
+
+We still require the password we found in the previous level to complete the transfer.
+
+Now that we have the key on our local machine, we can log into bandit14 via key authentication.
+
+![image](https://github.com/user-attachments/assets/a67260c9-241a-4d89-a9db-6da837eff5e2)
+
+<h2>Level 14 -> 15</h2>
