@@ -189,3 +189,36 @@ Now that we have the key on our local machine, we can log into bandit14 via key 
 ![image](https://github.com/user-attachments/assets/a67260c9-241a-4d89-a9db-6da837eff5e2)
 
 <h2>Level 14 -> 15</h2>
+
+The password for the next level can be retrieved by submitting the password of the current level to port 30000 on localhost.
+
+localhost essentially refers to the computer you are using. (It's interchangable with 127.0.0.1) 
+
+We can use nc (or NetCat) to connect to port 30000 on localhost. NetCat is a very useful network tool!
+
+But first we need to get the password of the current level. We logged in via key authentication before, but we can still access this level via password.
+
+![image](https://github.com/user-attachments/assets/5b01110f-5440-43d8-a2e6-742cb28885fe)
+
+Got it! Now we input this to port 30000 on localhost.
+
+![image](https://github.com/user-attachments/assets/d9e72957-c0a5-47fe-811e-91faaa215615)
+
+<h2>Level 15 -> 16</h2>
+
+The password for the next level can be retrieved by submitting the password of the current level to port 30001 on localhost using SSL/TLS encryption.
+
+SSL/TLS are encryption protocols used for securing internet connections between servers. 
+
+Here the openssl command can be used to set up a client from which we can start an SSL/TLS encrypted connection.
+
+This level had me very confused, until I opened the manual page for openssl-s_client. Reading man pages are really essential in this course...
+
+![image](https://github.com/user-attachments/assets/74da03d7-0003-4494-9079-a75d9154dcb4)
+
+This command opens a SSL/TLS encrypted connection. Without specifying the host, it defaults to localhost, so I've only specified the port.
+
+![image](https://github.com/user-attachments/assets/ffe5752b-cce4-4c51-bee0-753599e709e1)
+
+<h2>Level 16 -> 17</h2>
+
